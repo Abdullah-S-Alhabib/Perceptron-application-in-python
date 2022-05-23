@@ -39,7 +39,7 @@ def test2(classiter):
             elif test1[row][4] == classCheck[2]:
                 y = 1
             for col in range(
-                    len(test1[row]) - 1):  # the reason we use length of data instead of directly stating 4,
+                    len(test1[row]) - 1):  # the reason we use length of test instead of directly stating 4,
                 # is to make sure the program can fit data of any number of columns
                 activation += float(weight[col]) * float(test1[row][col]) + bias
             if activation * y >0:
@@ -54,11 +54,11 @@ def test2(classiter):
             elif test1[row][4] == classCheck[0]:
                 y = 1
             for col in range(
-                    len(test1[row]) - 1):  # the reason we use length of data instead of directly stating 4,
+                    len(test1[row]) - 1):  # the reason we use length of test instead of directly stating 4,
                 # is to make sure the program can fit data of any number of columns
                 activation += float(weight[col]) * float(test1[row][col]) + bias
             for col in range(
-                    len(test1[row]) - 1):  # the reason we use length of data instead of directly stating 4,
+                    len(test1[row]) - 1):  # the reason we use length of test instead of directly stating 4,
                 # is to make sure the program can fit data of any number of columns
                 activation += float(weight[col]) * float(test1[row][col]) + bias
             if activation * y >0:
@@ -70,7 +70,7 @@ def test2(classiter):
             elif test1[row][4] == classCheck[1]:
                 y = 1
             for col in range(
-                    len(test1[row]) - 1):  # the reason we use length of data instead of directly stating 4,
+                    len(test1[row]) - 1):  # the reason we use length of test instead of directly stating 4,
                 # is to make sure the program can fit data of any number of columns
                 activation += float(weight[col]) * float(test1[row][col]) + bias
             if activation * y >0:
