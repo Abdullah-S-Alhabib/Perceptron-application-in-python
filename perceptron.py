@@ -155,16 +155,18 @@ def main():
     for iteration in range(30):
         for classiter in range(3):
             perceptron(classiter)
-    for i in range(len(templist)):
-        print(data[templist[i]][4])
-    print(len(templist))
-    print(weight)
+    #for i in range(len(templist)):
+        #print(data[templist[i]][4])
+    print('weights =',weight)
+    print('perceptron accuracy ')
+    print(len(templist)/len(data)*100)
     for classiter in range(3):
         test2(classiter)
-    for k in range(len(templist1)):
-        print(test1[templist1[k]][4])
-    print(len(templist1))
-    print(weight)
+    #for k in range(len(templist1)):
+        #print(test1[templist1[k]][4])
+    print('weights =',weight)
+    print('Test accuracy ')
+    print(len(templist1) / len(test1) * 100)
 
 
    #plt.plot(errSum[1],errSum[0])
