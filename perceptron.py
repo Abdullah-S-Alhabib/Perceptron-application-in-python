@@ -1,115 +1,102 @@
+import math
 from random import *
-#import math
-#import matplotlib.pyplot as plt
+
+# import math
+# import matplotlib.pyplot as plt
 
 errSum = list()
 bias = 0
 data = list()
 test1 = list()
 classCheck = ['class-1\n', 'class-2\n', 'class-3\n']
-file = open("train1.data", 'r')
-file1 = open('test.data','r')
+file = open("train.data", 'r')
+file1 = open('test.data', 'r')
 
-weight = [1, 1, -1, -1]
+weight = [[1, 1, -1, -1], [1, 1, -1, -1], [1, 1, -1, -1]]
 for i in file:
     data.append(i.split(','))
 
 for j in file1:
-    test1.append(i.split(','))
+    test1.append(j.split(','))
 
 rowNum = len(data)  # constant for the number of rows.
 rowNum1 = len(test1)
 
 # random function to shuffle rows
 shuffle(data)
-def test2(classiter):
-    global templist1
-    """
-    perceptron function
 
+
+def test2():
     """
-    y = 0
+    Test function, runs the test data on the already trained weights.
+    :return: no return
+    """
+    global templist1
     templist1 = list()
 
-    for row in range(rowNum1):  # for each row
-        activation = 0  # calculate activation
-        if classiter == 0:
-            if test1[row][4] == classCheck[1]:
-                y = -1
-            elif test1[row][4] == classCheck[2]:
-                y = 1
-            for col in range(
-                    len(test1[row]) - 1):  # the reason we use length of test instead of directly stating 4,
-                # is to make sure the program can fit data of any number of columns
-                activation += float(weight[col]) * float(test1[row][col]) + bias
-            if activation * y <0:
-                pass
-            else:
-                if row not in templist1:
-                    templist1.append(row)
+    # for each row
+    for row in range(rowNum1):
+
+        sVal = []  # sigmoid values of the perceptron
+        classtemp = 0  # temporary holder for the class number
+
+        for classiter in range(3):
+            # test for each class
+            if classCheck[classiter] == data[row][4]:
+                classtemp = classiter
+            sVal.append(perceptronTest(row, classiter))
+        # if the highest sVal represents the currect class, add to list.
+        if sVal[classtemp] == max(sVal):
+            templist1.append(row)
+        else:
+            continue
 
 
-        elif classiter == 1:
-            if test1[row][4] == classCheck[2]:
-                y = -1
-            elif test1[row][4] == classCheck[0]:
-                y = 1
-            for col in range(
-                    len(test1[row]) - 1):  # the reason we use length of test instead of directly stating 4,
-                # is to make sure the program can fit data of any number of columns
-                activation += float(weight[col]) * float(test1[row][col]) + bias
-            for col in range(
-                    len(test1[row]) - 1):  # the reason we use length of test instead of directly stating 4,
-                # is to make sure the program can fit data of any number of columns
-                activation += float(weight[col]) * float(test1[row][col]) + bias
-            if activation * y <0:
-                pass
-            else:
-                if row not in templist1:
-                    templist1.append(row)
-        elif classiter == 2:
-            if test1[row][4] == classCheck[0]:
-                y = -1
-            elif test1[row][4] == classCheck[1]:
-                y = 1
-            for col in range(
-                    len(test1[row]) - 1):  # the reason we use length of test instead of directly stating 4,
-                # is to make sure the program can fit data of any number of columns
-                activation += float(weight[col]) * float(test1[row][col]) + bias
-            if activation * y <0:
-                pass
-            else:
-                if row not in templist1:
-                    templist1.append(row)
+def perceptronTest(row, classiter):
+    """
+    The testing perceptron, uses a sigmoid function to test input.
+    :param row: Row number for the input.
+    :param classiter: class number to test against.
+    :return: sigmoid activation value.
+    """
+    wSum = bias  # initiate weight sum with bias because we will add to it.
+    # the reason we use length of data instead of directly stating 4, is to make sure the program can fit data of any number of columns
+    for col in range(len(data[row]) - 1):
+        # Calculate weight sum
+        wSum += float(weight[classiter][col]) * float(data[row][col])
+
+    activation = 1 / (1 + math.exp(-wSum))
+
+    return activation
 
 
 def perceptron(classiter):
+    """
+    main perceptron training function, uses an activation function to test input and train weights.
+    :param classiter: the predicted class to train on.
+    :return:
+    """
     global templist
-    """
-    perceptron function
-
-    """
     y = 0
     templist = list()
 
-
     for row in range(rowNum):  # for each row
-        activation = 0  # calculate activation
+        activation = 0  # set/reset activation
         if data[row][4] == classCheck[classiter]:
             continue
         else:
+            # run through each class with class iteration
             if classiter == 0:
                 if data[row][4] == classCheck[1]:
                     y = -1
                 elif data[row][4] == classCheck[2]:
                     y = 1
-                for col in range(
-                        len(data[row]) - 1):  # the reason we use length of data instead of directly stating 4,
+                for col in range(len(data[row]) - 1):  # the reason we use length of data instead of directly stating 4,
                     # is to make sure the program can fit data of any number of columns
-                    activation += float(weight[col]) * float(data[row][col]) + bias
+                    activation += float(weight[classiter][col]) * float(data[row][col]) + bias
 
                 if y * activation <= 0:
-                    updateWeight(row, y)
+                    updateWeight(row, y, classiter)
                 else:
                     if row not in templist:
                         templist.append(row)
@@ -118,13 +105,11 @@ def perceptron(classiter):
                     y = -1
                 elif data[row][4] == classCheck[0]:
                     y = 1
-                for col in range(
-                        len(data[row]) - 1):  # the reason we use length of data instead of directly stating 4,
-                    # is to make sure the program can fit data of any number of columns
-                    activation += float(weight[col]) * float(data[row][col]) + bias
+                for col in range(len(data[row]) - 1):
+                    activation += float(weight[classiter][col]) * float(data[row][col]) + bias
 
                 if y * activation <= 0:
-                    updateWeight(row, y)
+                    updateWeight(row, y, classiter)
                 else:
                     if row not in templist:
                         templist.append(row)
@@ -133,54 +118,44 @@ def perceptron(classiter):
                     y = -1
                 elif data[row][4] == classCheck[1]:
                     y = 1
-                for col in range(
-                        len(data[row]) - 1):  # the reason we use length of data instead of directly stating 4,
-                    # is to make sure the program can fit data of any number of columns
-                    activation += float(weight[col]) * float(data[row][col]) + bias
+                for col in range(len(data[row]) - 1):
+                    activation += float(weight[classiter][col]) * float(data[row][col]) + bias
 
                 if y * activation <= 0:
-                    updateWeight(row, y)
+                    updateWeight(row, y, classiter)
                 else:
                     if row not in templist:
                         templist.append(row)
 
 
-def updateWeight(row, y):
+def updateWeight(row, y, classiter):
+    """
+    update the weights to get closer to expected value
+    :param row: Row number
+    :param y: expected output
+    :param classiter: current class iteration
+    """
     global classCheck, bias, weight, errSum
-    loss = 0
     for i in range(len(data[row]) - 1):
-        #loss += -(y * math.log10(float(weight[i])) + (1 - y) * math.log10(1 - float(weight[i])))
-        weight[i] = float(weight[i]) + y * float(data[row][i])
+        weight[classiter][i] = float(weight[classiter][i]) + y * float(data[row][i])
         bias += y
-    #errSum.append([loss,row])
-
 
 
 def main():
-    for iteration in range(30):
+    """
+    main function for the program.
+    """
+    # run the training
+    for iteration in range(35):
         for classiter in range(3):
             perceptron(classiter)
-    #for i in range(len(templist)):
-        #print(data[templist[i]][4])
-    print('weights =',weight)
-    print('perceptron accuracy ')
-    print(len(templist)/len(data)*100)
-    for classiter in range(3):
-        test2(classiter)
-    #for k in range(len(templist1)):
-        #print(test1[templist1[k]][4])
-    print('weights =',weight)
-    print('Test accuracy ')
-    print(len(templist1) / len(test1) * 100)
+    print('Weights =', weight)
+    print('Training accuracy: ' + str(len(templist) / len(data) * 100))
 
+    # run the test.
+    test2()
 
-   #plt.plot(errSum[1],errSum[0])
-   #plt.xlabel('row number')
-   #plt.ylabel('Cross entropy loss')
-
-   #plt.title('Error graph')
-
-   #plt.show()
+    print('Test accuracy: ' + str(len(templist1) / len(test1) * 100))
 
 
 main()
