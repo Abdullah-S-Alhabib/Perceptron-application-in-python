@@ -42,10 +42,11 @@ def test2(classiter):
                     len(test1[row]) - 1):  # the reason we use length of test instead of directly stating 4,
                 # is to make sure the program can fit data of any number of columns
                 activation += float(weight[col]) * float(test1[row][col]) + bias
-            if activation * y >0:
+            if activation * y <0:
+                pass
+            else:
                 if row not in templist1:
                     templist1.append(row)
-
 
 
         elif classiter == 1:
@@ -61,7 +62,9 @@ def test2(classiter):
                     len(test1[row]) - 1):  # the reason we use length of test instead of directly stating 4,
                 # is to make sure the program can fit data of any number of columns
                 activation += float(weight[col]) * float(test1[row][col]) + bias
-            if activation * y >0:
+            if activation * y <0:
+                pass
+            else:
                 if row not in templist1:
                     templist1.append(row)
         elif classiter == 2:
@@ -73,7 +76,9 @@ def test2(classiter):
                     len(test1[row]) - 1):  # the reason we use length of test instead of directly stating 4,
                 # is to make sure the program can fit data of any number of columns
                 activation += float(weight[col]) * float(test1[row][col]) + bias
-            if activation * y >0:
+            if activation * y <0:
+                pass
+            else:
                 if row not in templist1:
                     templist1.append(row)
 
