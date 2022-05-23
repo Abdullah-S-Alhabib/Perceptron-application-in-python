@@ -6,7 +6,7 @@ errSum = list()
 bias = 0
 data = list()
 classCheck = ['class-1\n', 'class-2\n', 'class-3\n']
-file = open("train1.data", 'r')
+file = open("train.data", 'r')
 weight = [1, 1, -1, -1]
 for i in file:
     data.append(i.split(','))
