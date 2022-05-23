@@ -5,16 +5,77 @@ from random import *
 errSum = list()
 bias = 0
 data = list()
+test1 = list()
 classCheck = ['class-1\n', 'class-2\n', 'class-3\n']
-file = open("train.data", 'r')
+file = open("train1.data", 'r')
+file1 = open('test.data','r')
+
 weight = [1, 1, -1, -1]
 for i in file:
     data.append(i.split(','))
 
+for j in file1:
+    test1.append(i.split(','))
+
 rowNum = len(data)  # constant for the number of rows.
+rowNum1 = len(test1)
 
 # random function to shuffle rows
 shuffle(data)
+def test2(classiter):
+    global templist1
+    """
+    perceptron function
+
+    """
+    y = 0
+    templist1 = list()
+
+    for row in range(rowNum1):  # for each row
+        activation = 0  # calculate activation
+        if classiter == 0:
+            if test1[row][4] == classCheck[1]:
+                y = -1
+            elif test1[row][4] == classCheck[2]:
+                y = 1
+            for col in range(
+                    len(test1[row]) - 1):  # the reason we use length of data instead of directly stating 4,
+                # is to make sure the program can fit data of any number of columns
+                activation += float(weight[col]) * float(test1[row][col]) + bias
+            if activation * y >0:
+                if row not in templist1:
+                    templist1.append(row)
+
+
+
+        elif classiter == 1:
+            if test1[row][4] == classCheck[2]:
+                y = -1
+            elif test1[row][4] == classCheck[0]:
+                y = 1
+            for col in range(
+                    len(test1[row]) - 1):  # the reason we use length of data instead of directly stating 4,
+                # is to make sure the program can fit data of any number of columns
+                activation += float(weight[col]) * float(test1[row][col]) + bias
+            for col in range(
+                    len(test1[row]) - 1):  # the reason we use length of data instead of directly stating 4,
+                # is to make sure the program can fit data of any number of columns
+                activation += float(weight[col]) * float(test1[row][col]) + bias
+            if activation * y >0:
+                if row not in templist1:
+                    templist1.append(row)
+        elif classiter == 2:
+            if test1[row][4] == classCheck[0]:
+                y = -1
+            elif test1[row][4] == classCheck[1]:
+                y = 1
+            for col in range(
+                    len(test1[row]) - 1):  # the reason we use length of data instead of directly stating 4,
+                # is to make sure the program can fit data of any number of columns
+                activation += float(weight[col]) * float(test1[row][col]) + bias
+            if activation * y >0:
+                if row not in templist1:
+                    templist1.append(row)
 
 
 def perceptron(classiter):
@@ -98,6 +159,13 @@ def main():
         print(data[templist[i]][4])
     print(len(templist))
     print(weight)
+    for classiter in range(3):
+        test2(classiter)
+    for k in range(len(templist1)):
+        print(test1[templist1[k]][4])
+    print(len(templist1))
+    print(weight)
+
 
    #plt.plot(errSum[1],errSum[0])
    #plt.xlabel('row number')
