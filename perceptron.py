@@ -159,3 +159,5 @@ def main():
 
 
 main()
+file.close()
+file1.close()
